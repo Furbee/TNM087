@@ -72,39 +72,49 @@ MImage =
 fh1 = imshow(FImage);
 fpts = ginput(3);
 
-%Center 
-center = fpts(2,:);
-
 %Minor axes
-axis1 = fpts(1,:)/2;
+axis1 = fpts(3,:)/2;
+
+%Center 
+center = fpts(2,:)/2;
 
 %Major axes
-axis2 = fpts(3,:)/2;
+axis2 = fpts(1,:)/2;
+
+
 
 P = [axis1 axis2];
 H = P*P';
+
+
+% TODO fix size of R and C
 DX = R(:)-center(1);
 DY = C(:)-center(2);
-D = [DX DY]*sqrtm(inv(H));
+D = [DX DY] * sqrtm(inv(H));
+
 Z = sum(D.^2,2);
 Z = reshape(Z, size(R));
 c = contourc(Z,1+[0 0]);
+
 xe = round(c(1,2:end));
 ye = round(c(2,2:end));
+
 Z = zeros(size(Z));
+
 % you should manage overflowed coordinates here
 Z(sub2ind(size(Z),ye,xe)) = 1;
 
 % Check
 figure
-%imagesc(Z)
-imshow(FImage)
+imagesc(Z)
+%imshow(FImage)
 hold on
 colormap(gray)
 plot(center(1),center(2),'wo');
 plot(center(1)+[0 axis1(1)], center(2)+[0 axis1(2)], 'w')
 plot(center(1)+[0 axis2(1)], center(2)+[0 axis2(2)], 'w')
-
+figure
+mesh(Z)
 
 
 
@@ -126,6 +136,11 @@ MImage = % replace eye points with red pixels
 imshow(MImage);
 
 end
+
+
+%%
+
+% https://www.mathworks.com/matlabcentral/newsreader/view_thread/327316
 
 %P = [axis1 axis2];
 %H = P*P';
