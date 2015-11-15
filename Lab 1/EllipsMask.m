@@ -7,7 +7,7 @@ function MImage = EllipsMask(FImage)
 % Author: Same LiU-ID/name as in the Lisam submission
 % Co-author: You can work in groups of max 2, this is the LiU-ID/name of
 % the other member of the group
-%
+% Oscar Nord oscno829
 %% Syntax of the function
 %
 % Input arguments:  Fimage: Image containing a face 
@@ -49,7 +49,8 @@ function MImage = EllipsMask(FImage)
 
 %% create the output image (RGB!) which is a copy of the original image
 % Use einstein.jpg as your FImage
-
+impath = '/Users/Oscar/Documents/TNM087/Images/einstein.jpg';
+FImage = imread(impath);
 [sr,sc] = size(FImage);
 MImage = 
 
@@ -66,7 +67,45 @@ MImage =
 % where the axes of the ellipse are parallel to the coordinate axes
 %
 
+%Display image and pick three points 
+% Ellipse data, axis1 and axis2 are ellipse semi-axis and must be orthogonal
+fh1 = imshow(FImage);
 fpts = ginput(3);
+
+%Center 
+center = fpts(2,:);
+
+%Minor axes
+axis1 = fpts(1,:)/2;
+
+%Major axes
+axis2 = fpts(3,:)/2;
+
+P = [axis1 axis2];
+H = P*P';
+DX = R(:)-center(1);
+DY = C(:)-center(2);
+D = [DX DY]*sqrtm(inv(H));
+Z = sum(D.^2,2);
+Z = reshape(Z, size(R));
+c = contourc(Z,1+[0 0]);
+xe = round(c(1,2:end));
+ye = round(c(2,2:end));
+Z = zeros(size(Z));
+% you should manage overflowed coordinates here
+Z(sub2ind(size(Z),ye,xe)) = 1;
+
+% Check
+figure
+%imagesc(Z)
+imshow(FImage)
+hold on
+colormap(gray)
+plot(center(1),center(2),'wo');
+plot(center(1)+[0 axis1(1)], center(2)+[0 axis1(2)], 'w')
+plot(center(1)+[0 axis2(1)], center(2)+[0 axis2(2)], 'w')
+
+
 
 
 %% Generate the elliptical mask and 
@@ -88,3 +127,25 @@ imshow(MImage);
 
 end
 
+%P = [axis1 axis2];
+%H = P*P';
+% DX = R(:)-center(1);
+% DY = C(:)-center(2);
+% D = [DX DY]*sqrtm(inv(H));
+% Z = sum(D.^2,2);
+% Z = reshape(Z, size(R));
+% c = contourc(Z,1+[0 0]);
+% xe = round(c(1,2:end));
+% ye = round(c(2,2:end));
+% Z = zeros(size(Z));
+% % you should manage overflowed coordinates here
+% Z(sub2ind(size(Z),ye,xe)) = 1;
+% 
+% % Check
+% figure
+% imagesc(Z)
+% hold on
+% plot(center(1),center(2),'wo');
+% plot(center(1)+[0 axis1(1)], center(2)+[0 axis1(2)], 'w')
+% plot(center(1)+[0 axis2(1)], center(2)+[0 axis2(2)], 'w')
+%axis equal

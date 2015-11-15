@@ -63,8 +63,8 @@ Qsize = 10;
 %% Your code starts here
 %
 %Load file
-impath = 'C:\Users\Oscar\Google Drive\TNM087\Lab 1\Images\cat.jpg';
-impath = 'H:\TNM087\Lab 1\Images\cat.jpg';
+impath = '/Users/Oscar/Documents/TNM087/Images/BoldRedEye.jpg';
+%impath = 'H:\TNM087\Lab 1\Images\cat.jpg';
 
 %% Collect image information with imfinfo 
 %   (ONE line of code for each output variable)
@@ -92,10 +92,10 @@ nopts = 3; %length of vector
 %Check i it's a grayscale or color image
 if ndims(OImage) > 2
     RGBpts = OImage;
-    disp('color')
+    disp('Image is of type: Color')
 else
     RGBpts = cat(3,OImage,OImage,OImage);
-    disp('grayscale')
+    disp('Image is of type: Grayscale')
 end
 
 fh1 = imshow(RGBpts);
@@ -112,7 +112,7 @@ end
 figh = figure;
 DImage = OImage;
 
-y = zeros(Qsize);
+%y = zeros(Qsize);
 
    
 for k = 1:nopts
