@@ -73,42 +73,42 @@ fh1 = imshow(FImage);
 fpts = ginput(3);
 
 %Minor axes
-axis1 = fpts(3,:);
+axis1 = fpts(3,:)/2;
 
 %Center 
 center = fpts(2,:);
 
 %Major axes
-axis2 = fpts(1,:);
+axis2 = fpts(1,:)/2;
+
+A = FImage;
 
 
-
-
-% Create a logical image of an ellipse with specified
-% semi-major and semi-minor axes, center, and image size.
-% First create the image.
-imageSizeX = 640;
-imageSizeY = 480;
-[columnsInImage rowsInImage] = meshgrid(1:imageSizeX, 1:imageSizeY);
-% Next create the ellipse in the image.
-centerX = 320;
-centerY = 240;
-radiusX = 250;
-radiusY = 150;
-ellipsePixels = (rowsInImage - centerY).^2 ./ radiusY^2 ...
-    + (columnsInImage - centerX).^2 ./ radiusX^2 <= 1;
-% circlePixels is a 2D "logical" array.
-% Now, display it.
-image(ellipsePixels) ;
-colormap([0 0 0; 1 1 1]);
-title('Binary image of a ellipse', 'FontSize', 20);
+% % Create a logical image of an ellipse with specified
+% % semi-major and semi-minor axes, center, and image size.
+% % First create the image.
+% imageSizeX = 640;
+% imageSizeY = 480;
+% [columnsInImage rowsInImage] = meshgrid(1:imageSizeX, 1:imageSizeY);
+% % Next create the ellipse in the image.
+% centerX = 320;
+% centerY = 240;
+% radiusX = 250;
+% radiusY = 150;
+% ellipsePixels = (rowsInImage - centerY).^2 ./ radiusY^2 ...
+%     + (columnsInImage - centerX).^2 ./ radiusX^2 <= 1;
+% % circlePixels is a 2D "logical" array.
+% % Now, display it.
+% image(ellipsePixels) ;
+% colormap([0 0 0; 1 1 1]);
+% title('Binary image of a ellipse', 'FontSize', 20);
 
 
 
 % P = [axis1 axis2];
 % H = P*P';
-
-
+% 
+% 
 % % TODO fix size of R and C
 % DX = R(:)-center(1);
 % DY = C(:)-center(2);
@@ -128,10 +128,10 @@ title('Binary image of a ellipse', 'FontSize', 20);
 % 
 % % Check
 % figure
-% %imagesc(Z)
-% imshow(FImage)
+% imagesc(FImage)
+% %imshow(FImage)
 % hold on
-% colormap(gray)
+% 
 % plot(center(1),center(2),'wo');
 % plot(center(1)+[0 axis1(1)], center(2)+[0 axis1(2)], 'w')
 % plot(center(1)+[0 axis2(1)], center(2)+[0 axis2(2)], 'w')
@@ -139,18 +139,44 @@ title('Binary image of a ellipse', 'FontSize', 20);
 % mesh(Z)
 
 
+%# Create an ellipse shaped mask
+c = fix(center);   %# Ellipse center point (y, x)
+r_sq = [axis1(2), axis2(1)] .^ 2;  %# Ellipse radii squared (y-axis, x-axis)
+
+%[X, Y] = meshgrid(1:size(A, 2), 1:size(A, 1));
+
+%ellipse_mask = (r_sq(2) * (C - c(2)) .^ 2 + r_sq(1) * (R - c(1)) .^ 2 <= prod(r_sq));
+
+%# Apply the mask to the image
+%A_cropp = bsxfun(@times, A, uint8(ellipse_mask));
+
+
+%imshow(A_cropp)
 
 %% Generate the elliptical mask and 
 % set all points in MImage outside the mask to black 
 ...
-fmask =  % this is the mask use C and R to generate it
-MImage = % here you modify the image using fmask
+fmask =  (r_sq(2) * (C - c(2)) .^ 2 + r_sq(1) * (R - c(1)) .^ 2 <= prod(r_sq));% this is the mask use C and R to generate it
+MImage = bsxfun(@times, A, uint8(fmask));% here you modify the image using fmask
 
+
+imshow(MImage)
 %% Pick two points defining one eye, generate the eyemask, paint it red
+fh1 = imshow(FImage);
 
 epts = ginput(2);
-emask = % circular eye mask again, use C and R
-MImage = % replace eye points with red pixels
+
+%Center 
+center = fpts(2,:);
+
+%axis
+axis = fpts(1,:);
+
+c = fix(center);   %# Ellipse center point (y, x)
+r_sq = [axis(2), axis(1)] .^ 2;  %# Ellipse radii squared (y-axis, x-axis)
+
+emask = (r_sq(2) * (C - c(2)) .^ 2 + r_sq(1) * (R - c(1)) .^ 2 <= prod(r_sq));% circular eye mask again, use C and R
+MImage = bsxfun(@times, A, uint8(emask));% replace eye points with red pixels
 
 
 %% Display result if you want
