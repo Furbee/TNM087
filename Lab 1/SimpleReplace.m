@@ -57,22 +57,39 @@ function figh = SimpleReplace(filename, rows, cols, box )
 %% create figure and read image
 %
 figh = figure;
-Oimage = imread('H:\TNM087\Lab 1\Images\bild.jpg');
+%Oimage = imread('H:\TNM087\Lab 1\Images\bild.jpg');
+Oimage = imread('/Users/Oscar/Documents/TNM087/Lab 1/Images/bild.jpg');
 
 %% Copy image and edit
 %
+figure(1)
 Nimage = Oimage;
-
+%imshow(Oimage);
 
 % change rows
+Nimage = Nimage(1:end,:,1);
+%figure(2)
+%imshow(Nimage);
 
-Nimage = Nimage(:,:,3);
-Nimage(:,1:end)  
+Nimage(:,1:end) = 255;
+%figure(3)
+%imshow(Nimage);
 
-%Nimage(Nimage(NimageRed(:,1:end),NimageRed(1:end,:),3))
+Fimage(:,:,3) = Oimage(:,:,3);
+Fimage(:,:,2) = Oimage(:,:,2);
+Fimage(:,:,1) = Nimage;
+
+%figure(4)
+%imshow(Fimage)
 
 % change cols
-%Nimage = 
+Nimage = Oimage(:,1:end,2);
+Nimage(:,1:end) = 255;
+
+Fimage(:,:,2) = Nimage;
+
+%figure(5)
+%imshow(Fimage)
 
 % change box
 %Nimage =
