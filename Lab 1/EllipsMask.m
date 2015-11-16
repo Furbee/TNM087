@@ -73,48 +73,70 @@ fh1 = imshow(FImage);
 fpts = ginput(3);
 
 %Minor axes
-axis1 = fpts(3,:)/2;
+axis1 = fpts(3,:);
 
 %Center 
-center = fpts(2,:)/2;
+center = fpts(2,:);
 
 %Major axes
-axis2 = fpts(1,:)/2;
+axis2 = fpts(1,:);
 
 
 
-P = [axis1 axis2];
-H = P*P';
+
+% Create a logical image of an ellipse with specified
+% semi-major and semi-minor axes, center, and image size.
+% First create the image.
+imageSizeX = 640;
+imageSizeY = 480;
+[columnsInImage rowsInImage] = meshgrid(1:imageSizeX, 1:imageSizeY);
+% Next create the ellipse in the image.
+centerX = 320;
+centerY = 240;
+radiusX = 250;
+radiusY = 150;
+ellipsePixels = (rowsInImage - centerY).^2 ./ radiusY^2 ...
+    + (columnsInImage - centerX).^2 ./ radiusX^2 <= 1;
+% circlePixels is a 2D "logical" array.
+% Now, display it.
+image(ellipsePixels) ;
+colormap([0 0 0; 1 1 1]);
+title('Binary image of a ellipse', 'FontSize', 20);
 
 
-% TODO fix size of R and C
-DX = R(:)-center(1);
-DY = C(:)-center(2);
-D = [DX DY] * sqrtm(inv(H));
 
-Z = sum(D.^2,2);
-Z = reshape(Z, size(R));
-c = contourc(Z,1+[0 0]);
+% P = [axis1 axis2];
+% H = P*P';
 
-xe = round(c(1,2:end));
-ye = round(c(2,2:end));
 
-Z = zeros(size(Z));
-
-% you should manage overflowed coordinates here
-Z(sub2ind(size(Z),ye,xe)) = 1;
-
-% Check
-figure
-imagesc(Z)
-%imshow(FImage)
-hold on
-colormap(gray)
-plot(center(1),center(2),'wo');
-plot(center(1)+[0 axis1(1)], center(2)+[0 axis1(2)], 'w')
-plot(center(1)+[0 axis2(1)], center(2)+[0 axis2(2)], 'w')
-figure
-mesh(Z)
+% % TODO fix size of R and C
+% DX = R(:)-center(1);
+% DY = C(:)-center(2);
+% D = [DX DY] * sqrtm(inv(H));
+% 
+% Z = sum(D.^2,2);
+% Z = reshape(Z, size(R));
+% c = contourc(Z,1+[0 0]);
+% 
+% xe = round(c(1,2:end));
+% ye = round(c(2,2:end));
+% 
+% Z = zeros(size(Z));
+% 
+% % you should manage overflowed coordinates here
+% Z(sub2ind(size(Z),ye,xe)) = 1;
+% 
+% % Check
+% figure
+% %imagesc(Z)
+% imshow(FImage)
+% hold on
+% colormap(gray)
+% plot(center(1),center(2),'wo');
+% plot(center(1)+[0 axis1(1)], center(2)+[0 axis1(2)], 'w')
+% plot(center(1)+[0 axis2(1)], center(2)+[0 axis2(2)], 'w')
+% figure
+% mesh(Z)
 
 
 
