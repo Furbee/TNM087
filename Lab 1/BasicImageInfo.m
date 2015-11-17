@@ -63,8 +63,7 @@ Qsize = 10;
 %% Your code starts here
 %
 %Load file
-impath = '/Users/Oscar/Documents/TNM087/Images/BoldRedEye.jpg';
-%impath = 'H:\TNM087\Lab 1\Images\cat.jpg';
+impath = filename;
 
 %% Collect image information with imfinfo 
 %   (ONE line of code for each output variable)
@@ -74,8 +73,7 @@ info = imfinfo(impath);
 ImSize = info.FileSize  
 ImType = info.Format
 BitPerPixel = info.BitDepth
-ColorType = info.ColorType
-% Use 'ColorType' to find out if it is a color or a grayvalue image 
+ColorType = info.ColorType % Use 'ColorType' to find out if it is a color or a grayvalue image
 %% Compute minimum and maximum values
 %   (ONE line of code)
 OImage = imread(impath);
@@ -85,72 +83,42 @@ MaxMin = [double(max(OImage(:))),double(min(OImage(:)))];
 % Decide what you do if it is a grayvalue image
 %
 
-%RGBpts = [OImage(:,:,1),OImage(:,:,2),OImage(:,:,3)];
-%RGBpts = OImage;
-
-nopts = 3; %length of vector
-%Check i it's a grayscale or color image
+%Check if it's a grayscale or color image
 if ndims(OImage) > 2
     RGBpts = OImage;
     disp('Image is of type: Color')
 else
+    %If not set it to "rgb"-image
     RGBpts = cat(3,OImage,OImage,OImage);
     disp('Image is of type: Grayscale')
 end
 
-
-
-
+%Show image and take input from user
 fh1 = imshow(RGBpts);
-PtPos = ginput(nopts);
+PtPos = ginput(nopts)
 
-disp(PtPos(:,:))
+
 PtPos(:,:) = round(PtPos(:,:),0)
 
 for k = 1:nopts
-    %RGBpts = RGBpts(double(PtPos),double(PtPos),:);
     RGBpts(PtPos(k,2),PtPos(k,1),:) = 255;
 end
 
 %% Generate the white squares and display the result
 %
 figh = figure;
-DImage = RGBpts;
+DImage = RGBpts;   
 
-%y = zeros(Qsize);
-
-   
+%Show image and generate squares on top
+figure
+imshow(DImage)
+hold on
 for k = 1:nopts
-    %Generate the white squares
-    %Qsize
+    %Generate the white squares from PtPos with size of Qsize
+    rectangle('Position',[PtPos(k,1),PtPos(k,2),Qsize,Qsize],...
+        'faceColor', 'white') 
+end 
 
-    %DImage(PtPos(k,2),PtPos(k,1),:) = 255;
-    
-%     rectangle('Position',[PtPos(k,2),PtPos(k,1),Qsize,Qsize],...
-%       'Curvature',[0,0],...
-%      'LineStyle','-', 'faceColor', 'black')
-%     axis off; hold on imshow(DImage); daspect([1,1,1])
-    
-%     figure(1)
-%     rx = PtPos(k,2);
-%     ry = PtPos(k,1);
-%     rw = Qsize;
-%     rh = Qsize;
-%     
-%     rectangle('Position',[rx,ry,rw,rh]);
-%     rectangle('FaceColor',[1 1 1]) 
-%     hold off
-end
-    imshow(RGBpts)
- 
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     
