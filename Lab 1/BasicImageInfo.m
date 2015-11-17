@@ -7,11 +7,10 @@ function [ ImSize, ImType, BitPerPixel, MaxMin, RGBpts, figh ] = ...
 %
 %% Who has done it
 %
-% Author: Same LiU-ID/name as in the Lisam submission
+% Author: Oscar Nord LiU-ID: oscno829
 % Co-author: You can work in groups of max 2, this is the LiU-ID/name of
 % the other member of the group
 %
-%--------OSCAR NORD oscno829-----------% 
 
 %% Syntax of the function
 %
@@ -35,7 +34,7 @@ function [ ImSize, ImType, BitPerPixel, MaxMin, RGBpts, figh ] = ...
 %% Basic version control (in case you need more than one attempt)
 %
 % Version: 1
-% Date: today
+% Date: 17/11/2015
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
@@ -74,16 +73,19 @@ ImSize = info.FileSize
 ImType = info.Format
 BitPerPixel = info.BitDepth
 ColorType = info.ColorType % Use 'ColorType' to find out if it is a color or a grayvalue image
+
 %% Compute minimum and maximum values
 %   (ONE line of code)
-OImage = imread(impath);
-MaxMin = [double(max(OImage(:))),double(min(OImage(:)))];
+OImage = imread(impath); 
+%Get max and min in form of [max,min]
+MaxMin = [double(max(OImage(:))),double(min(OImage(:)))]
 
 %% Pick the pixel positions and collect the RGBvectors
 % Decide what you do if it is a grayvalue image
 %
-
+nopts = 3;
 %Check if it's a grayscale or color image
+%Number of dimensions in the image if > 2 in a RGB image
 if ndims(OImage) > 2
     RGBpts = OImage;
     disp('Image is of type: Color')
@@ -97,7 +99,7 @@ end
 fh1 = imshow(RGBpts);
 PtPos = ginput(nopts)
 
-
+% round to nearest int
 PtPos(:,:) = round(PtPos(:,:),0)
 
 for k = 1:nopts
@@ -110,7 +112,6 @@ figh = figure;
 DImage = RGBpts;   
 
 %Show image and generate squares on top
-figure
 imshow(DImage)
 hold on
 for k = 1:nopts
