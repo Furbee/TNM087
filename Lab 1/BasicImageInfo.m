@@ -98,19 +98,24 @@ else
     disp('Image is of type: Grayscale')
 end
 
+
+
+
 fh1 = imshow(RGBpts);
 PtPos = ginput(nopts);
 
-disp(PtPos(:,1))
+disp(PtPos(:,:))
+PtPos(:,:) = round(PtPos(:,:),0)
 
 for k = 1:nopts
-    RGBpts(double(PtPos),double(PtPos),:) = RGBpts;
+    %RGBpts = RGBpts(double(PtPos),double(PtPos),:);
+    RGBpts(PtPos(k,2),PtPos(k,1),:) = 255;
 end
 
 %% Generate the white squares and display the result
 %
 figh = figure;
-DImage = OImage;
+DImage = RGBpts;
 
 %y = zeros(Qsize);
 
@@ -119,7 +124,7 @@ for k = 1:nopts
     %Generate the white squares
     %Qsize
 
-    DImage(PtPos(k,2),PtPos(k,1),:) = 255;
+    %DImage(PtPos(k,2),PtPos(k,1),:) = 255;
     
 %     rectangle('Position',[PtPos(k,2),PtPos(k,1),Qsize,Qsize],...
 %       'Curvature',[0,0],...
@@ -136,7 +141,7 @@ for k = 1:nopts
 %     rectangle('FaceColor',[1 1 1]) 
 %     hold off
 end
-    imshow(DImage)
+    imshow(RGBpts)
  
     
     

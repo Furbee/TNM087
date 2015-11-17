@@ -72,16 +72,14 @@ MImage =
 fh1 = imshow(FImage);
 fpts = ginput(3);
 
-%Minor axes
-axis1 = fpts(3,:)/2;
-
 %Center 
 center = fpts(2,:);
 
-%Major axes
-axis2 = fpts(1,:)/2;
+%Minor axes
+axis1 = fpts(3,:)-center;
 
-A = FImage;
+%Major axes
+axis2 = fpts(1,:)-center;
 
 
 % % Create a logical image of an ellipse with specified
@@ -139,9 +137,16 @@ A = FImage;
 % mesh(Z)
 
 
-%# Create an ellipse shaped mask
-c = fix(center);   %# Ellipse center point (y, x)
-r_sq = [axis1(2), axis2(1)] .^ 2;  %# Ellipse radii squared (y-axis, x-axis)
+% Create an ellipse shaped mask
+% Ellipse center (y, x)
+c = fix(center);
+%# Ellipse radii squared (y-axis, x-axis)
+r_sq = [abs(axis2(2)), abs(axis1(1))] .^ 2;  
+
+
+
+
+
 
 %[X, Y] = meshgrid(1:size(A, 2), 1:size(A, 1));
 
@@ -155,9 +160,8 @@ r_sq = [axis1(2), axis2(1)] .^ 2;  %# Ellipse radii squared (y-axis, x-axis)
 
 %% Generate the elliptical mask and 
 % set all points in MImage outside the mask to black 
-...
 fmask =  (r_sq(2) * (C - c(2)) .^ 2 + r_sq(1) * (R - c(1)) .^ 2 <= prod(r_sq));% this is the mask use C and R to generate it
-MImage = bsxfun(@times, A, uint8(fmask));% here you modify the image using fmask
+MImage = bsxfun(@times, FImage, uint8(fmask));% here you modify the image using fmask
 
 
 imshow(MImage)
