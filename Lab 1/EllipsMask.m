@@ -7,10 +7,10 @@ function MImage = EllipsMask(FImage)
 % Author: Oscar Nord LiU-ID: oscno829
 % Co-author: You can work in groups of max 2, this is the LiU-ID/name of
 % the other member of the group
-% 
+%
 %% Syntax of the function
 %
-% Input arguments:  Fimage: Image containing a face 
+% Input arguments:  Fimage: Image containing a face
 %
 % Output argument:  Mimage: Image with elliptical mask and a red eye
 %
@@ -19,7 +19,7 @@ function MImage = EllipsMask(FImage)
 %% Basic version control (in case you need more than one attempt)
 %
 % Version: 1
-% Date: today
+% Date: 18/11/2015
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
@@ -54,18 +54,18 @@ function MImage = EllipsMask(FImage)
 MImage = FImage;
 
 %% Generate the coordinates of the grid points
- [C R] = meshgrid((1:sc),(1:sr));
-% Remember the matlab convention regarding rows, columns, x and y coordinates. Feel free to use 
+[C R] = meshgrid((1:sc),(1:sr));
+% Remember the matlab convention regarding rows, columns, x and y coordinates. Feel free to use
 % [Y,X] = meshgrid((1:sx),(1:sy)) or whatever notation instead if you feel more comfortable with that notation
 
 %% Pick three points that define the elliptical mask of the face
 % Read more about ellipses at https://en.wikipedia.org/wiki/Ellipse
-% Your solution must at least be able to solve the problem for the case 
+% Your solution must at least be able to solve the problem for the case
 % where the axes of the ellipse are parallel to the coordinate axes
 %
 
 disp('Select three (3) points in order of: origin -> y-axis -> x-axis')
-%Display image and pick three points 
+%Display image and pick three points
 % Ellipse data, axis1 and axis2 are ellipse semi-axis and must be orthogonal
 fh1 = imshow(MImage);
 
@@ -73,19 +73,19 @@ fh1 = imshow(MImage);
 fpts = ginput(3);
 
 % fpts in form of (x,y)
-% Ellipse center point 
+% Ellipse center point
 origin = fix(fpts(1,:));
 
 %y-axis
-yaxis = fix(fpts(2,:)); 
+yaxis = fix(fpts(2,:));
 
 %x-axis
 xaxis = fix(fpts(3,:));
 
-%% Generate the elliptical mask and 
-% set all points in MImage outside the mask to black 
+%% Generate the elliptical mask and
+% set all points in MImage outside the mask to black
 % Radius of ellipse [y-axis, x-axis]^2
-radius_sq = [xaxis(1), yaxis(2)].^ 2;  
+radius_sq = [xaxis(1), yaxis(2)].^ 2;
 
 %Create ellipse mask with input given by the user
 fmask =  (radius_sq(2)*(R - origin(2)).^ 2 + radius_sq(1)*(C - origin(1)).^ 2 <= prod(radius_sq)); % this is the mask use C and R to generate it
@@ -101,14 +101,15 @@ disp('Select two (2) points in order of: radius on x-axis -> center')
 fh1 = imshow(MImage);
 epts = ginput(2);
 
-%Center 
+%Center
 origin = fix(epts(2,:));
 
 %axis
 axis = fix(epts(1,:));
 
 % Radius of ellipse [x-axis, y-axis]
-radius = [axis(1), axis(2)]; 
+radius = [axis(1), axis(2)];
+
 %Create circular mask with input given by the user
 emask = (radius(2) * (R - origin(2)).^ 2 + radius(1) * (C - origin(1)) .^ 2 >= prod(radius));% circular eye mask again, use C and R
 
