@@ -7,7 +7,7 @@ function GImage = GammaCorrection( OImage, Gamma, Lower, Upper )
 %
 %% Who has done it
 %
-% Author: Same LiU-ID/name as in the Lisam submission
+% Author: Oscar Nord, LiU-ID: oscno829
 % Co-author: You can work in groups of max 2, this is the LiU-ID/name of
 % the other member of the group
 %
@@ -27,7 +27,7 @@ function GImage = GammaCorrection( OImage, Gamma, Lower, Upper )
 %% Basic version control (in case you need more than one attempt)
 %
 % Version: 1
-% Date: today
+% Date: 19/11/2015
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
