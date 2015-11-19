@@ -4,7 +4,7 @@ function CImage = WhitePoint(OImage,type)
 %
 %% Who has done it
 %
-% Author: Same LiU-ID/name as in the Lisam submission
+% Author: Oscar Nord LiU-ID: oscno829 
 % Co-author: You can work in groups of max 2, this is the LiU-ID/name of
 % the other member of the group
 %
@@ -49,6 +49,7 @@ function CImage = WhitePoint(OImage,type)
 
 %% Your code starts here
 %
+OImage = imread('C:\Users\Oscar\Documents\GitHub\TNM087\Lab 1\Images\bild.jpg');
 
 %% The default output type is uint8 
 % More information about handling of function arguments, string
@@ -71,7 +72,7 @@ end;
 % You can assume that it is either uint8 or double
 %
     if isa(OImage,'uint8')
-        InputImage = % convert to double
+        InputImage = double(OImage);% convert to double
     else
         InputImage = OImage;
     end
@@ -79,13 +80,20 @@ end;
 %% Display the input image and pick the white point
 
 fh = figure;
-imshow %display the input image 
+imshow(OImage) %display the input image 
+
 whitept = ginput(1); % select the point that should be white
-rgbvec = squeeze(... % This is the RGB vector at the point you selected
+
+whitept = round(whitept);
+
+rgbvec = InputImage(double(whitept(:,1)),double(whitept(:,2)),:);
+
+rgbvec = squeeze(rgbvec); % This is the RGB vector at the point you selected
+
 %% Generate the result image CImage
 switch otype
     case 'b' %uint8
-        CImage
+        CImage 
     case 'd' %double
         CImage
     otherwise 

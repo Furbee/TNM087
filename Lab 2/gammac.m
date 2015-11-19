@@ -17,9 +17,6 @@ function output_image = gammac(input_image,gamma_value)
  
 I = double(rgb2gray(input_image));
 %Determine input image dimensions
-
-Lower = 0;
-Upper = 1;
  
 [j k] = size(I);
 %Determine the extreme intensity values for our input image
