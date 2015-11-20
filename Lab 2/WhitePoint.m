@@ -49,8 +49,8 @@ function CImage = WhitePoint(OImage,type)
 
 %% Your code starts here
 %
-OImage = imread('C:\Users\Oscar\Documents\GitHub\TNM087\Lab 1\Images\bild.jpg');
-
+%OImage = imread('C:\Users\Oscar\Documents\GitHub\TNM087\Lab 1\Images\bild.jpg');
+OImage = imread('/Users/Oscar/Documents/TNM087/Lab 1/Images/bild.jpg');
 %% The default output type is uint8 
 % More information about handling of function arguments, string
 % manipulation and basic data types can be found in WhitePoint.pdf
@@ -88,7 +88,7 @@ whitept = round(whitept);
 
 rgbvec = InputImage(double(whitept(:,1)),double(whitept(:,2)),:);
 
-rgbvec = squeeze(rgbvec); % This is the RGB vector at the point you selected
+rgbvec = squeeze(rgbvec)'; % This is the RGB vector at the point you selected
 
 %% Generate the result image CImage
 switch otype
@@ -113,7 +113,40 @@ end
 % after the scaling you have to truncate the pixel values
 % Finally you have to convert the result to the datatype given by otype
 
-CImage =
+%maxpix = max(rgbvec);
+
+%InputImage = otype(InputImage(:,:,:) < maxpix);
+
+desiredMean = round(mean([rgbvec(1), rgbvec(2), rgbvec(3)]));
+
+meanR = mean2(InputImage(:,:,1));
+
+meanG = mean2(InputImage(:,:,2));
+
+meanB = mean2(InputImage(:,:,3));
+
+correctionFactorR = desiredMean / meanR;
+correctionFactorG = desiredMean / meanG;
+correctionFactorB = desiredMean / meanB;
+
+% Linearly scale the image in the cropped ROI.
+
+redChannel   = InputImage(:,:,1);
+greenChannel = InputImage(:,:,2);
+blueChannel  = InputImage(:,:,3);
+
+redChannel   = uint8(single(redChannel) * correctionFactorR);
+greenChannel = uint8(single(greenChannel) * correctionFactorG);
+blueChannel  = uint8(single(blueChannel) * correctionFactorB);
+
+% Recombine into an RGB image
+% Recombine separate color channels into a single, true color RGB image.
+correctedRgbImage = cat(3, redChannel, greenChannel, blueChannel);
+
+
+CImage = correctedRgbImage;
+
+imshow(CImage);
 
 %% Cleaning
 close(fh)
