@@ -22,7 +22,7 @@ function CImage = WhitePoint(OImage,type)
 %% Basic version control (in case you need more than one attempt)
 %
 % Version: 1
-% Date: today
+% Date: 20/11/2015
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
@@ -49,8 +49,7 @@ function CImage = WhitePoint(OImage,type)
 
 %% Your code starts here
 %
-%OImage = imread('C:\Users\Oscar\Documents\GitHub\TNM087\Lab 1\Images\bild.jpg');
-OImage = imread('/Users/Oscar/Documents/TNM087/Lab 1/Images/bild.jpg');
+
 %% The default output type is uint8 
 % More information about handling of function arguments, string
 % manipulation and basic data types can be found in WhitePoint.pdf
@@ -78,28 +77,25 @@ end;
     end
 
 %% Display the input image and pick the white point
-
 fh = figure;
 imshow(OImage) %display the input image 
 
 whitept = ginput(1); % select the point that should be white
-
 whitept = round(whitept);
 
+%Set rgbvec
 rgbvec = InputImage(double(whitept(:,1)),double(whitept(:,2)),:);
-
 rgbvec = squeeze(rgbvec)'; % This is the RGB vector at the point you selected
 
 %% Generate the result image CImage
 switch otype
     case 'b' %uint8
-        CImage 
+        CImage = uint8(OImage); 
     case 'd' %double
-        CImage
+        CImage = double(OImage);
     otherwise 
 %         if you do the extended version add your code here
 end 
-
 
 %% Scaling of CImage such that the pixel at whitept is
 % (maxpix,maxpix,maxpix) 
@@ -113,44 +109,31 @@ end
 % after the scaling you have to truncate the pixel values
 % Finally you have to convert the result to the datatype given by otype
 
-%maxpix = max(rgbvec);
-
-%InputImage = otype(InputImage(:,:,:) < maxpix);
-
-desiredMean = round(mean([rgbvec(1), rgbvec(2), rgbvec(3)]));
-
+%Get mean of point and original image
+meanrgb = round(mean([rgbvec(1), rgbvec(2), rgbvec(3)]));
 meanR = mean2(InputImage(:,:,1));
-
 meanG = mean2(InputImage(:,:,2));
-
 meanB = mean2(InputImage(:,:,3));
 
-correctionFactorR = desiredMean / meanR;
-correctionFactorG = desiredMean / meanG;
-correctionFactorB = desiredMean / meanB;
+%Scale image.
+cFactorR = meanrgb/meanR;
+cFactorG = meanrgb/meanG;
+cFactorB = meanrgb/meanB;
 
-% Linearly scale the image in the cropped ROI.
+%Get channels 
+rch = InputImage(:,:,1);
+gch = InputImage(:,:,2);
+bch = InputImage(:,:,3);
 
-redChannel   = InputImage(:,:,1);
-greenChannel = InputImage(:,:,2);
-blueChannel  = InputImage(:,:,3);
-
-redChannel   = uint8(single(redChannel) * correctionFactorR);
-greenChannel = uint8(single(greenChannel) * correctionFactorG);
-blueChannel  = uint8(single(blueChannel) * correctionFactorB);
+%Do the white point correction
+rch = uint8(single(rch) * cFactorR);
+gch = uint8(single(gch) * cFactorG);
+bch = uint8(single(bch) * cFactorB);
 
 % Recombine into an RGB image
-% Recombine separate color channels into a single, true color RGB image.
-correctedRgbImage = cat(3, redChannel, greenChannel, blueChannel);
-
-
-CImage = correctedRgbImage;
-
-imshow(CImage);
+CImage = cat(3, rch, gch, bch);
 
 %% Cleaning
 close(fh)
-
-
 end
 

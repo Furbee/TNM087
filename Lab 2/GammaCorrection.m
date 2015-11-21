@@ -27,7 +27,7 @@ function GImage = GammaCorrection( OImage, Gamma, Lower, Upper )
 %% Basic version control (in case you need more than one attempt)
 %
 % Version: 1
-% Date: 19/11/2015
+% Date: 20/11/2015
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
@@ -54,16 +54,8 @@ function GImage = GammaCorrection( OImage, Gamma, Lower, Upper )
 
 %% Image size and result allocation
 %
-close all
-clear all
-clc
-Gamma = 1;
-Lower = 0.1;
-Upper = 0.98;
 
-OImage = imread('C:\Users\Oscar\Documents\GitHub\TNM087\Lab 1\Images\bild.jpg');
-
-%Convert to grayscale
+%Convert OImage to grayscale
 if isa(OImage,'uint8')
         OImage = double(rgb2gray(OImage)); %convert to double
     else
@@ -85,24 +77,26 @@ uppgv = quantile(GImage(:),Upper);
 % because 0^Gamma = 0 and 1^Gamma = 1
 %
 
-out_min = double(1);
-out_max = double(1);
-%Determine the amount to "shift/move" pixel intensity values by
- 
-shift_val = lowgv - out_min;
-%Determine the value to "scale" pixel intensity values by
- 
-scale_val = (out_max)/(uppgv-lowgv);
-%Perform the shift and scale (in that order)
- 
-GImage = (GImage(:,:,:)-double(shift_val)).*double(scale_val);
-%Perform the gamma correction operation
+%Set max & min values to use in shift/move & scale
+omin = double(1);
+omax = double(1);
 
+%Determine the shift/move pixel intensity values
+shift_val = lowgv - omin;
+
+%Determine the value to "scale" pixel intensity values by
+scale_val = omax/(uppgv-lowgv);
+%scale_val = omax/(lowgv-uppgv);
+
+%Perform the shift and scale
+GImage = (GImage(1:sx,1:sy,1:nc)-double(shift_val)).*double(scale_val);
 
 %% Actual mapping of the previous result 
 %
+%Perform gamma correction
 GImage = GImage.^Gamma; %mapping
 
+%Display image
 imshow(GImage)
 end
 
