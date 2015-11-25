@@ -57,20 +57,27 @@ function [ Profile1, Profile2 ] = Vignette( Im1, Im2, norings )
 %% Input parameters
 %
 if nargin < 3
+    norings = 50; %if norings is not spec set it to 50
+end
     
 %% Generate two square images cIm1 and cIm2 that have the same size
 % Use the center of the images and if at least one of them is an RGB image 
 % either convert to gray value or exit with an error message
 %
-[sr1, sc1, nc] = size(Im1);
-[sr2
+[sr1, sc1, nc]  = size(Im1);
+[sr2, sc2, nc2] = size(Im2);
 
 if sr1 ~= sc1
 
+end
+
 if sr2
-    
+
+end
+
 if Im1 and Im2 are not of the same size
-    
+
+end
 %     
 cIm1 = 
 cIm2 =
