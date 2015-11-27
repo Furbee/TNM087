@@ -58,18 +58,18 @@ function [ ImSize, ImType, BitPerPixel, MaxMin, RGBpts, figh ] = ...
 
 %% Internal variable describing the size of the marked square
 Qsize = 10;
-
+nopts = 3;
 %% Your code starts here
 %
 %Load file
-impath = filename;
+impath = '/Users/Oscar/Documents/TNM087/Lab 1/Images/bild.jpg';
 
 %% Collect image information with imfinfo 
 %   (ONE line of code for each output variable)
 %Get info of imagefile
 info = imfinfo(impath);
 
-ImSize = info.FileSize  
+ImSize = [info.Width, info.Height]  
 ImType = info.Format
 BitPerPixel = info.BitDepth
 ColorType = info.ColorType % Use 'ColorType' to find out if it is a color or a grayvalue image
@@ -87,23 +87,22 @@ nopts = 3;
 %Check if it's a grayscale or color image
 %Number of dimensions in the image if > 2 in a RGB image
 if ndims(OImage) > 2
-    RGBpts = OImage;
     disp('Image is of type: Color')
 else
     %If not set it to "rgb"-image
-    RGBpts = cat(3,OImage,OImage,OImage);
+    OImage = cat(3,OImage,OImage,OImage);
     disp('Image is of type: Grayscale')
 end
 
 %Show image and take input from user
-fh1 = imshow(RGBpts);
-PtPos = ginput(nopts)
+fh1 = imshow(OImage);
+PtPos = ginput(nopts);
 
 % round to nearest int
-PtPos(:,:) = round(PtPos(:,:),0)
+PtPos(:,:) = round(PtPos(:,:),0);
 
 for k = 1:nopts
-    RGBpts(PtPos(k,2),PtPos(k,1),:) = 255;
+    RGBpts(k,k) = OImage(PtPos(k,2),PtPos(k,1));
 end
 
 %% Generate the white squares and display the result
