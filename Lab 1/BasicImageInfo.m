@@ -57,13 +57,16 @@ function [ ImSize, ImType, BitPerPixel, MaxMin, RGBpts, figh ] = ...
 %
 
 %% Internal variable describing the size of the marked square
+clear all
+clc
 Qsize = 10;
 nopts = 3;
 %% Your code starts here
 %
 %Load file
-impath = '/Users/Oscar/Documents/TNM087/Lab 1/Images/bild.jpg';
+%impath = '/Users/Oscar/Documents/TNM087/Lab 1/Images/bild.jpg';
 
+impath = 'C:\Users\Oscar\Documents\GitHub\TNM087\Lab 1\Images\bild.jpg';
 %% Collect image information with imfinfo 
 %   (ONE line of code for each output variable)
 %Get info of imagefile
@@ -99,7 +102,7 @@ fh1 = imshow(OImage);
 PtPos = ginput(nopts);
 
 % round to nearest int
-PtPos(:,:) = round(PtPos(:,:),0);
+PtPos(:,:) = round(PtPos(:,:));
 
 for k = 1:nopts
     RGBpts(k,k) = OImage(PtPos(k,2),PtPos(k,1));
@@ -108,17 +111,18 @@ end
 %% Generate the white squares and display the result
 %
 figh = figure;
-DImage = RGBpts;   
+DImage = OImage;   
 
 %Show image and generate squares on top
 imshow(DImage)
 hold on
 for k = 1:nopts
     %Generate the white squares from PtPos with size of Qsize
-    rectangle('Position',[PtPos(k,1),PtPos(k,2),Qsize,Qsize],...
-        'faceColor', 'white') 
+    for n = 1:Qsize
+    DImage(PtPos(k,2)*n,PtPos(k,1)*n,:) = 255;
+    end
 end 
-
+imshow(DImage)
     
     
     
