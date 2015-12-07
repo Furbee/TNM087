@@ -64,24 +64,74 @@ end
 % Use the center of the images and if at least one of them is an RGB image 
 % either convert to gray value or exit with an error message
 %
+clear all;
+clc;
+
+Im1 = imread('H:\TNM087\TNM087-master\Lab 3\CWhite1.jpg');
+Im2 = imread('H:\TNM087\TNM087-master\Lab 3\HWhite1.jpg');
+
 [sr1, sc1, nc]  = size(Im1);
 [sr2, sc2, nc2] = size(Im2);
 
+if nc > 2
+Im1 = rgb2gray(Im1);
+end
+if nc2 > 2
+Im2 = rgb2gray(Im2);
+end
+
+cIm1 = [sr1/2, sc1/2]; 
+cIm2 = [sr2/2, sc2/2];
+
+cIm1 = round(cIm1);
+cIm2 = round(cIm2);
+%%
+
+t = cIm1(1) - cIm1(2);
+s = cIm1(1) + cIm1(2);
+
+t1 = cIm1(2) - cIm1(1);
+s1 = cIm1(2) + cIm1(1);
+
+% t = logical(t);
+% s = logical(s);
+% t1 = logical(t1);
+% s1 = logical(s1);
+t2 = cIm2(1) - cIm2(2);
+s2 = cIm2(1) + cIm2(2);
+
+t22 = cIm2(2) - cIm2(1);
+s22 = cIm2(2) + cIm2(1);
+
 if sr1 ~= sc1
-
+    if sr1 > sc1
+        %Im1crop = Im1( round((sr1/2 - sc1/2)):round((sr1/2 + sc1/2)),:); 
+        Im1 = Im1((t+1):s,:);
+    end
+    if sr1 < sc1
+       %Im1crop = Im1(:,round((sc1/2 - sr1/2)):round((sc1/2 + sr1/2)));    
+       Im1 = Im1(:,(t1+1):s1);
+    end
 end
 
-if sr2
-
+if sr2 ~= sc2
+    if sr2 > sc2
+        %Im2crop = Im2((round(sr2/2 - sc2/2)):round((sr2/2 + sc2/2)),:); 
+        Im2 = Im2((t2+1):s2,:);
+    end
+    else
+       %Im2crop = Im2(:,round((sc2/2 - sr2/2)):round((sc2/2 + sr2/2)));  
+       Im2 = Im2(:,(t22+1):s22);
 end
 
-if Im1 and Im2 are not of the same size
-
+if Im1 ~= Im2
+    %cropFactor = length(Im1(1,:));
+    Im2 = imresize(Im2, size(Im1));        
 end
 %     
-cIm1 = 
-cIm2 =
-
+% cIm1 = Im1;
+% cIm2 = Im2;
+norings = 50;
 Profile1 = zeros(norings,1);
 Profile2 = Profile1;
 
@@ -90,17 +140,17 @@ Profile2 = Profile1;
 %   rings
 %
 
-ax = ( : ) 
+%ax = ( : ) 
 % or read the documentation of linspace
-ax = linspace 
+ax = linspace(1,cIm1(1), norings); 
 %...
 
-[C R] = meshgrid %Euclidean mesh
-[~,Rho] = cart2pol %Polar coordinates comment on the ~ used
+[C R] = meshgrid(sr1,sc1); %Euclidean mesh
+[A,Rho] = cart2pol(cIm1(1), cIm1(2)); %Polar coordinates comment on the ~ used
 
 %% Do the actual calculations
 for ringno = 1:norings
-    RMask = % Generate a mask describing the ring number ringno
+    RMask = cIm1(1):ax(ringno)^2*pi; % Generate a mask describing the ring number ringno
     nopixels = % Compute the number of pixes in RMask
     pixsum = % Compute the sum over all pixel values in RMask in Im1
     Profile1(ringno) = % ../.. Mean gray value of pixels i RMask
