@@ -26,7 +26,7 @@ function [ Profile1, Profile2 ] = Vignette( Im1, Im2, norings )
 %% Basic version control (in case you need more than one attempt)
 %
 % Version: 1
-% Date: today
+% Date: 2015-12-09
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
@@ -70,17 +70,17 @@ clc;
 %Im1 = imread('H:\TNM087\TNM087-master\Lab 3\CWhite1.jpg');
 %Im2 = imread('H:\TNM087\TNM087-master\Lab 3\HWhite1.jpg');
 
-Im2 = imread('/Users/Oscar/Documents/TNM087/Images/CWhite1.jpg');
-Im1 = imread('/Users/Oscar/Documents/TNM087/Images/HWhite1.jpg');
+Im1 = imread('/Users/VikH/Documents/TNM087/Images/CWhite1.jpg');
+Im2 = imread('/Users/VikH/Documents/TNM087/Images/HWhite1.jpg');
 
 
 [sr1, sc1, nc]  = size(Im1);
 [sr2, sc2, nc2] = size(Im2);
 
-if nc > 2
+if nc > 1
 Im1 = rgb2gray(Im1);
 end
-if nc2 > 2
+if nc2 > 1
 Im2 = rgb2gray(Im2);
 end
 
@@ -97,10 +97,6 @@ s = cIm1(1) + cIm1(2);
 t1 = cIm1(2) - cIm1(1);
 s1 = cIm1(2) + cIm1(1);
 
-% t = logical(t);
-% s = logical(s);
-% t1 = logical(t1);
-% s1 = logical(s1);
 t2 = cIm2(1) - cIm2(2);
 s2 = cIm2(1) + cIm2(2);
 
@@ -145,15 +141,16 @@ Profile2 = Profile1;
 ax = linspace(1,cIm1(1), norings); 
 %...
 
-[C R] = meshgrid(sr1,sc1); %Euclidean mesh
-[A,Rho] = cart2pol(cIm1(1), cIm1(2)); %Polar coordinates comment on the ~ used
+[C R] = meshgrid( Im1(1), Im ); %Euclidean mesh
+[~,Rho] = cart2pol(cIm1(1)/2, cIm1(2)/2); %Polar coordinates comment on the ~ used
 
 %% Do the actual calculations
 for ringno = 1:norings
-    RMask = cIm1(1):ax(ringno)^2*pi; % Generate a mask describing the ring number ringno
-    nopixels = % Compute the number of pixes in RMask
-    pixsum = % Compute the sum over all pixel values in RMask in Im1
-    Profile1(ringno) = % ../.. Mean gray value of pixels i RMask
+    %RMask = cIm1(1):ax(ringno)^2*pi; % Generate a mask describing the ring number ringno
+    RMask = (Round(Rho) == ringno);
+    % nopixels = % Compute the number of pixes in RMask
+    pixsum = 1;% Compute the sum over all pixel values in RMask in Im1
+    % Profile1(ringno) = % ../.. Mean gray value of pixels i RMask
         % ... and now you do it for the second images
     Profile2
 end
