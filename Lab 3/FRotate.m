@@ -52,21 +52,28 @@ function RImage = FRotate(OImage, center, degangle )
 %       You can assume that it has uint8 pixels 
 %       What should you do if this is not the case?
 %
+clear all
+clc
+
+OImage = imread('/Users/Oscar/Documents/TNM087/Lab 1/Images/bild.jpg');
 [sr,sc,nc] = size(OImage);
+
+center = [sr/2, sc/2]; 
+
 
 %% Generate coordinate vectors for the shifted coordinate system
 % (this means converting the index vector for a pixel to the 
 %   coordinate vector of the same pixel)
 %
-ir = %index vector for pixels along first Matlab dimension
-ic = %same in the second direction
+ir = sub2ind(size(OImage), sr); %index vector for pixels along first Matlab dimension
+ic = sub2ind(size(OImage), sc); %same in the second direction
 
-cir = %shifted ir vector so that center(1) is the origin
-cic = %Same for the second axis
+cir = circshift(ir,center(1)); %shifted ir vector so that center(1) is the origin
+cic = circshift(ic,center(2)); %Same for the second axis
 
 %% Use cir and cic in meshgrid to generate a coordinate grid
 %
-[C,R] = meshgrid % cir, cic
+[C,R] = meshgrid(cir,cic); % cir, cic
 
 %% The polar mesh coordinates are computed with cart2pol
 %
