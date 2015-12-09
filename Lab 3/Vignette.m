@@ -104,23 +104,19 @@ t22 = cIm2(2) - cIm2(1);
 s22 = cIm2(2) + cIm2(1);
 
 if sr1 ~= sc1
-    if sr1 > sc1
-        %Im1crop = Im1( round((sr1/2 - sc1/2)):round((sr1/2 + sc1/2)),:); 
+    if sr1 > sc1 
         Im1 = Im1((t+1):s,:);
     end
     if sr1 < sc1
-       %Im1crop = Im1(:,round((sc1/2 - sr1/2)):round((sc1/2 + sr1/2)));    
        Im1 = Im1(:,(t1+1):s1);
     end
 end
 
 if sr2 ~= sc2
     if sr2 > sc2
-        %Im2crop = Im2((round(sr2/2 - sc2/2)):round((sr2/2 + sc2/2)),:); 
         Im2 = Im2((t2+1):s2,:);
     end
     else
-       %Im2crop = Im2(:,round((sc2/2 - sr2/2)):round((sc2/2 + sr2/2)));  
        Im2 = Im2(:,(t22+1):s22);
 end
 
