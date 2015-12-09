@@ -67,8 +67,12 @@ end
 clear all;
 clc;
 
-Im1 = imread('H:\TNM087\TNM087-master\Lab 3\CWhite1.jpg');
-Im2 = imread('H:\TNM087\TNM087-master\Lab 3\HWhite1.jpg');
+%Im1 = imread('H:\TNM087\TNM087-master\Lab 3\CWhite1.jpg');
+%Im2 = imread('H:\TNM087\TNM087-master\Lab 3\HWhite1.jpg');
+
+Im2 = imread('/Users/Oscar/Documents/TNM087/Images/CWhite1.jpg');
+Im1 = imread('/Users/Oscar/Documents/TNM087/Images/HWhite1.jpg');
+
 
 [sr1, sc1, nc]  = size(Im1);
 [sr2, sc2, nc2] = size(Im2);
