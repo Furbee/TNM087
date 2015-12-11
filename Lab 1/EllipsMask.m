@@ -4,13 +4,13 @@ function MImage = EllipsMask(FImage)
 %
 %% Who has done it
 %
-% Author: Oscar Nord LiU-ID: oscno829
-% Co-author: You can work in groups of max 2, this is the LiU-ID/name of
-% the other member of the group
+% Author: vikhe927
+% Co-author: oscno829
+% 
 %
 %% Syntax of the function
 %
-% Input arguments:  Fimage: Image containing a face
+% Input arguments:  Fimage: Image containing a face 
 %
 % Output argument:  Mimage: Image with elliptical mask and a red eye
 %
@@ -18,8 +18,8 @@ function MImage = EllipsMask(FImage)
 %
 %% Basic version control (in case you need more than one attempt)
 %
-% Version: 1
-% Date: 18/11/2015
+% Version: 1.1
+% Date: 2015-12-11
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
@@ -46,82 +46,78 @@ function MImage = EllipsMask(FImage)
 
 %% Your code starts here
 %
+%clear all;
+clc;
+
+%FImage = imread('/Users/VikH/Documents/TNM087/Images/einstein.jpg');
+FImage = imread( FImage );
+
 
 %% create the output image (RGB!) which is a copy of the original image
 % Use einstein.jpg as your FImage
 
-[sr,sc] = size(FImage);
-MImage = FImage;
+[sr,sc] = size( FImage );
+%if ndims(FImage) < 2
+%   MImage = cat(FImage,FImage,FImage);
+%   
+%else
+    MImage = FImage;
+%end
+
 
 %% Generate the coordinates of the grid points
-[C R] = meshgrid((1:sc),(1:sr));
-% Remember the matlab convention regarding rows, columns, x and y coordinates. Feel free to use
+ [C R] = meshgrid((1:sc),(1:sr));
+% Remember the matlab convention regarding rows, columns, x and y coordinates. Feel free to use 
 % [Y,X] = meshgrid((1:sx),(1:sy)) or whatever notation instead if you feel more comfortable with that notation
+
+
 
 %% Pick three points that define the elliptical mask of the face
 % Read more about ellipses at https://en.wikipedia.org/wiki/Ellipse
-% Your solution must at least be able to solve the problem for the case
+% Your solution must at least be able to solve the problem for the case 
 % where the axes of the ellipse are parallel to the coordinate axes
 %
+imshow(FImage);
 
-disp('Select three (3) points in order of: origin -> y-axis -> x-axis')
-%Display image and pick three points
-% Ellipse data, axis1 and axis2 are ellipse semi-axis and must be orthogonal
-fh1 = imshow(MImage);
+disp('First choose centerpoint, then width and lastly height')
+fpts = round(ginput(3));
 
-% Select points (3) in order of: origin -> y-axis -> x-axis
-fpts = ginput(3);
-
-% fpts in form of (x,y)
-% Ellipse center point
-origin = fix(fpts(1,:));
-
-%y-axis
-yaxis = fix(fpts(2,:));
-
-%x-axis
-xaxis = fix(fpts(3,:));
-
-%% Generate the elliptical mask and
-% set all points in MImage outside the mask to black
-% Radius of ellipse [y-axis, x-axis]^2
-radius_sq = [xaxis(1), yaxis(2)].^ 2;
-
-%Create ellipse mask with input given by the user
-fmask =  (radius_sq(2)*(R - origin(2)).^ 2 + radius_sq(1)*(C - origin(1)).^ 2 <= prod(radius_sq)); % this is the mask use C and R to generate it
-
-% Create mask on image
-MImage = bsxfun(@times, MImage, uint8(fmask));% here you modify the image using fmask
-
-% Show image with mask
-imshow(MImage)
+centerPoint = fpts(1,:); %set centerpoint to the first point chosen
+widthAxix = abs(fpts(2,1)-centerPoint(1,1)) ; %set length of x-axis
+heightAxis = abs(fpts(3,2)-centerPoint(1,2)) ; %set length of y-axis 
+% 
+%% Generate the elliptical mask and 
+% set all points in MImage outside the mask to black 
+...
+fmask = (((C-centerPoint(1))/widthAxix).^2 + ((R-centerPoint(2))/heightAxis).^2) <= 1; % this is the mask use C and R to generate it
+MImage(~fmask) = 0; % in the Image where 
 
 %% Pick two points defining one eye, generate the eyemask, paint it red
-disp('Select two (2) points in order of: radius on x-axis -> center')
-fh1 = imshow(MImage);
-epts = ginput(2);
 
-%Center
-origin = fix(epts(2,:));
+imshow(MImage);
+disp('First choose centerpoint and then radius')
 
-%axis
-axis = fix(epts(1,:));
+epts = round(ginput(2));
 
-% Radius of ellipse [x-axis, y-axis]
-radius = [axis(1), axis(2)];
+cCirc = epts(1,:); %set center of circle
+rCirc = (abs(epts(2,1)-cCirc(1) + epts(2,2)-cCirc(2))); %set radius of circle
 
-%Create circular mask with input given by the user
-emask = (radius(2) * (R - origin(2)).^ 2 + radius(1) * (C - origin(1)) .^ 2 >= prod(radius));% circular eye mask again, use C and R
+emask = ((C-cCirc(1))/rCirc).^2 + ((R-cCirc(2))/rCirc).^2 <= 1;% circular eye mask again, use C and R
 
-%Set emask to an rgb image with pure red color
-emask = cat(3, emask, emask, emask);
-emask(:,:,1) = 1;
+redImage = MImage;  %create red,blue and green channels
+greenImage = MImage;
+blueImage = MImage;
 
-%Apply mask on image
-MImage = bsxfun(@times, MImage, uint8(emask));% replace eye points with red pixels
+redImage(emask) = 255; %set red-channel to max-value
+greenImage(emask) = 0; %and the others to min-value
+blueImage(emask) = 0;
+
+MImage = cat(3, redImage, greenImage,blueImage); %merge channels to MImage
+
 
 %% Display result if you want
 %
 imshow(MImage);
 
 end
+
