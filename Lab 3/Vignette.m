@@ -7,7 +7,7 @@ function [ Profile1, Profile2 ] = Vignette( Im1, Im2, norings )
 %% Who has done it
 %
 % Author: vikhe927
-% Co-author: oscno
+% Co-author: oscno829
 %
 %% Syntax of the function
 %
@@ -58,9 +58,9 @@ function [ Profile1, Profile2 ] = Vignette( Im1, Im2, norings )
 if nargin < 3
     norings = 50; %if norings is not spec set it to 50
 end
-    
+
 %% Generate two square images cIm1 and cIm2 that have the same size
-% Use the center of the images and if at least one of them is an RGB image 
+% Use the center of the images and if at least one of them is an RGB image
 % either convert to gray value or exit with an error message
 %
 clear all;
@@ -80,7 +80,7 @@ clc;
 [sr1, sc1, nc]  = size(Im1);
 [sr2, sc2, nc2] = size(Im2);
 
-cIm1 = round( [sr1/2, sc1/2] ); 
+cIm1 = round( [sr1/2, sc1/2] );
 cIm2 = round( [sr2/2, sc2/2] );
 
 cropShift1 = abs( cIm1(1) - cIm1(2) );
@@ -89,7 +89,7 @@ cropShift2 = abs( cIm2(1) - cIm2(2) );
 bool = 0;
 
 varList = {'sc1','sr1','sc2','sr2', 'nc', 'nc2', 'cIm1', 'cIm2', 'cropShift1', 'cropShift2', 'bool'};
-% No need to do this, but we tried it to see how it worked. 
+% No need to do this, but we tried it to see how it worked.
 %Used to clear variables later.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -118,32 +118,32 @@ end
 if sr1 ~= sc1
     if sr1 > sc1
         Im1 = Im1( cropShift1 : (cropShift1 + sc1-1) , :);
-    
+        
     elseif sc1 > sr1
         Im1 = Im1( : , cropShift1 : (cropShift1 + sr1-1) );
-    
-    %[sr1 sc1] = size(Im1);          %reset sr1 & sc1
-    %cIm1 = round( [sr1/2, sc1/2] ); %reset centerpoint
+        
+        %[sr1 sc1] = size(Im1);          %reset sr1 & sc1
+        %cIm1 = round( [sr1/2, sc1/2] ); %reset centerpoint
     end
 end
 
 if sr2 ~= sc2
     if sr2 > sc2
         Im2 = Im2( cropShift2 : (cropShift2 + sc2-1) , : );
-    
+        
     elseif sc2 > sr2
-       Im2 = Im2( : , cropShift2 : (cropShift2 + sr2-1) );
-    
-    [sr2 sc2] = size(Im2);          %reset sr2 & sc2
-    cIm2 = round( [sr2/2, sc2/2] ); %reset centerpoint
+        Im2 = Im2( : , cropShift2 : (cropShift2 + sr2-1) );
+        
+        [sr2 sc2] = size(Im2);          %reset sr2 & sc2
+        cIm2 = round( [sr2/2, sc2/2] ); %reset centerpoint
     end
 end
 
 %Check if Im1 & Im2 are same size, if not: resize one.
-bool = isequal(size(Im1),size(Im2)); %if equal bool=1  
+bool = isequal(size(Im1),size(Im2)); %if equal bool=1
 
 if bool ~= 1
-    Im2 = imresize(Im2, size(Im1));        
+    Im2 = imresize(Im2, size(Im1));
 end
 
 
@@ -152,7 +152,7 @@ Profile1 = zeros(norings,1);
 Profile2 = Profile1;
 
 %convert images to doubles
-Im1 = im2double(Im1); 
+Im1 = im2double(Im1);
 Im2 = im2double(Im2);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -162,19 +162,19 @@ imshow(Im1);
 figure;
 imshow(Im2);
 
-%% Now you have two gray value images of the size (square) size and you 
+%% Now you have two gray value images of the size (square) size and you
 %   generate grid with the help of an axis vector ax that defines your
 %   rings
 %
 
 clear(varList{:});  %Clear variables used to test and crop the picture, no need for them from here on
-                    %Could've been cleared earlier but for tutors
-                    %convenience they were not. 
-                
-                
-%ax = ( : ) 
+%Could've been cleared earlier but for tutors
+%convenience they were not.
+
+
+%ax = ( : )
 % or read the documentation of linspace
-ax = linspace(-1, 1, length(Im1)); 
+ax = linspace(-1, 1, length(Im1));
 %...
 
 [C R] = meshgrid( ax, ax ); %Euclidean mesh
@@ -190,14 +190,14 @@ for ringno = 1:norings
     
     %Profile1 summation
     pixsum = sum(Im1(RMask)); % Compute the sum over all pixel values in RMask in Im1
-    Profile1(ringno) = pixsum/nopixels; % ../.. Mean gray value of pixels i RMask
-        % ... and now you do it for the second images
+    Profile1(ringno) = pixsum/nopixels; % Mean gray value of pixels i RMask
+    % ... and now you do it for the second images
     %Profile2 summation
     pixsum2 = sum(Im2(RMask));
     Profile2(ringno) = pixsum2/nopixels;
 end
 
-%% Finally the normalization to max value one 
+%% Finally the normalization to max value one
 %
 Profile1 = Profile1/max(Profile1);
 Profile2 = Profile2/max(Profile2);
