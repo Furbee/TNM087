@@ -70,8 +70,8 @@ clc;
 %Im1 = imread('H:\TNM087\TNM087-master\Lab 3\CWhite1.jpg');
 %Im2 = imread('H:\TNM087\TNM087-master\Lab 3\HWhite1.jpg');
 
-%Im1 = imread('/Users/VikH/Documents/TNM087/Images/CWhite1.jpg');
-%Im2 = imread('/Users/VikH/Documents/TNM087/Images/HWhite1.jpg');
+Im1 = imread('/Users/VikH/Documents/TNM087/Images/CWhite1.jpg');
+Im2 = imread('/Users/VikH/Documents/TNM087/Images/HWhite1.jpg');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                          DECLARATIONS
@@ -89,8 +89,6 @@ cropShift2 = abs( cIm2(1) - cIm2(2) );
 bool = 0;
 
 varList = {'sc1','sr1','sc2','sr2', 'nc', 'nc2', 'cIm1', 'cIm2', 'cropShift1', 'cropShift2', 'bool'};
-% No need to do this, but we tried it to see how it worked. 
-%Used to clear variables later.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                          SET TESTVALUES
@@ -140,7 +138,7 @@ if sr2 ~= sc2
 end
 
 %Check if Im1 & Im2 are same size, if not: resize one.
-bool = isequal(size(Im1),size(Im2)); %if equal bool=1  
+bool = isequal(size(Im1),size(Im2));
 
 if bool ~= 1
     Im2 = imresize(Im2, size(Im1));        
