@@ -55,29 +55,33 @@ function RImage = FRotate(OImage, center, degangle )
 clear all
 clc
 
-OImage = imread('/Users/Oscar/Documents/TNM087/Lab 1/Images/bild.jpg');
+OImage = imread('H:\TNM087\New Master\TNM087-master\Images\einstein.jpg');
+deangle = 90;
+
+
 [sr,sc,nc] = size(OImage);
 
-center = [sr/2, sc/2]; 
+center = round([sr/2, sc/2]); 
+
 
 
 %% Generate coordinate vectors for the shifted coordinate system
 % (this means converting the index vector for a pixel to the 
 %   coordinate vector of the same pixel)
-%
-ir = sub2ind(size(OImage), sr); %index vector for pixels along first Matlab dimension
-ic = sub2ind(size(OImage), sc); %same in the second direction
 
-cir = circshift(ir,center(1)); %shifted ir vector so that center(1) is the origin
-cic = circshift(ic,center(2)); %Same for the second axis
+ir = (1:numel(OImage(:,1)))';               %index vector for pixels along first Matlab dimension
+ic = 1:numel(OImage(1,:));                  %same in the second direction
+
+cir = circshift(ir, [(center(1)-1),0]);     %shifted ir vector so that center(1) is the origin
+cic = circshift(ic, [0, (center(2)-1)]);    %Same for the second axis
 
 %% Use cir and cic in meshgrid to generate a coordinate grid
 %
 [C,R] = meshgrid(cir,cic); % cir, cic
-
+plot(C,R);
 %% The polar mesh coordinates are computed with cart2pol
 %
-[Theta,Rho] = cart2pol %
+[Theta,Rho] = cart2pol(R,C); %
 
 %% Convert the degress, modify the angles and 
 %   transform back to Euclidean coordinates 
