@@ -6,8 +6,8 @@ function [ Profile1, Profile2 ] = Vignette( Im1, Im2, norings )
 %
 %% Who has done it
 %
-% Author: vikhe927
-% Co-author: oscno829
+% Author: oscno829 
+% Co-author: vikhe927
 %
 %% Syntax of the function
 %
@@ -184,8 +184,8 @@ end
 
 %% Finally the normalization to max value one
 %
-Profile1 = Profile1/max(Profile1);
-Profile2 = Profile2/max(Profile2);
+Profile1 = Profile1/max(Profile1)
+Profile2 = Profile2/max(Profile2)
 
 %% Extra question: How can you find out if Im1 is better than Im2?
 

@@ -33,8 +33,8 @@ function [ ImSize, ImType, BitPerPixel, MaxMin, RGBpts, figh ] = ...
 %
 %% Basic version control (in case you need more than one attempt)
 %
-% Version: 1
-% Date: 17/11/2015
+% Version: 2
+% Date: 14/12/2015
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
@@ -57,16 +57,13 @@ function [ ImSize, ImType, BitPerPixel, MaxMin, RGBpts, figh ] = ...
 %
 
 %% Internal variable describing the size of the marked square
-clear all
-clc
+
 Qsize = 10;
-nopts = 3;
 %% Your code starts here
 %
 %Load file
-%impath = '/Users/Oscar/Documents/TNM087/Lab 1/Images/bild.jpg';
+impath = filename;
 
-impath = 'C:\Users\Oscar\Documents\GitHub\TNM087\Lab 1\Images\bild.jpg';
 %% Collect image information with imfinfo 
 %   (ONE line of code for each output variable)
 %Get info of imagefile
@@ -105,7 +102,7 @@ PtPos = ginput(nopts);
 PtPos(:,:) = round(PtPos(:,:));
 
 for k = 1:nopts
-    RGBpts(k,k) = OImage(PtPos(k,2),PtPos(k,1));
+    RGBpts(k,:,:) = impixel(OImage, PtPos(k,1), PtPos(k,2));
 end
 
 %% Generate the white squares and display the result
@@ -119,7 +116,8 @@ hold on
 for k = 1:nopts
     %Generate the white squares from PtPos with size of Qsize
     for n = 1:Qsize
-    DImage(PtPos(k,2)*n,PtPos(k,1)*n,:) = 255;
+        DImage((PtPos(k,2)- (Qsize/2)):(PtPos(k,2)+ (Qsize/2)),(PtPos(k,1) ... 
+                - (Qsize/2)):(PtPos(k,1)+ (Qsize/2)),:) = 255;
     end
 end 
 imshow(DImage)
