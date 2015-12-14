@@ -24,8 +24,8 @@ function [ Profile1, Profile2 ] = Vignette( Im1, Im2, norings )
 %
 %% Basic version control (in case you need more than one attempt)
 %
-% Version: 1.2
-% Date: 2015-12-13
+% Version: 1
+% Date: 2015-12-14
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
@@ -63,15 +63,6 @@ end
 % Use the center of the images and if at least one of them is an RGB image
 % either convert to gray value or exit with an error message
 %
-clear all;
-close all;
-clc;
-
-%Im1 = imread('H:\TNM087\TNM087-master\Lab 3\CWhite1.jpg');
-%Im2 = imread('H:\TNM087\TNM087-master\Lab 3\HWhite1.jpg');
-
-%Im1 = imread('/Users/VikH/Documents/TNM087/Images/CWhite1.jpg');
-%Im2 = imread('/Users/VikH/Documents/TNM087/Images/HWhite1.jpg');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                          DECLARATIONS
@@ -88,14 +79,10 @@ cropShift2 = abs( cIm2(1) - cIm2(2) );
 
 bool = 0;
 
-varList = {'sc1','sr1','sc2','sr2', 'nc', 'nc2', 'cIm1', 'cIm2', 'cropShift1', 'cropShift2', 'bool'};
+varList = {'sc1','sr1','sc2','sr2', 'nc', 'nc2', 'cIm1', ... 
+           'cIm2', 'cropShift1', 'cropShift2', 'bool'};
 % No need to do this, but we tried it to see how it worked.
 %Used to clear variables later.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                          SET TESTVALUES
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-norings = 50;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                          SHOW PICTURES
@@ -122,8 +109,6 @@ if sr1 ~= sc1
     elseif sc1 > sr1
         Im1 = Im1( : , cropShift1 : (cropShift1 + sr1-1) );
         
-        %[sr1 sc1] = size(Im1);          %reset sr1 & sc1
-        %cIm1 = round( [sr1/2, sc1/2] ); %reset centerpoint
     end
 end
 
@@ -168,8 +153,8 @@ imshow(Im2);
 %
 
 clear(varList{:});  %Clear variables used to test and crop the picture, no need for them from here on
-%Could've been cleared earlier but for tutors
-%convenience they were not.
+                    %Could've been cleared earlier but for tutors
+                    %convenience they were not.
 
 
 %ax = ( : )
