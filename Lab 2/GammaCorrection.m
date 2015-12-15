@@ -55,11 +55,13 @@ function GImage = GammaCorrection( OImage, Gamma, Lower, Upper )
 %% Image size and result allocation
 %
 
-%Convert OImage to grayscale
+
+
+%Convert OImage to double
 if isa(OImage,'uint8')
-        OImage = double(rgb2gray(OImage)); %convert to double
+        OImage = im2double(OImage); %convert to double
     else
-        OImage = double(rgb2gray(OImage)); %if double do nothing
+        OImage = im2double(OImage); %if double do nothing
 end
 
 [sx,sy,nc] = size(OImage);
@@ -78,8 +80,8 @@ uppgv = quantile(GImage(:),Upper);
 %
 
 %Set max & min values to use in shift/move & scale
-omin = double(1);
-omax = double(1);
+omin = 1;
+omax = 1;
 
 %Determine the shift/move pixel intensity values
 shift_val = lowgv - omin;
@@ -89,7 +91,9 @@ scale_val = omax/(uppgv-lowgv);
 %scale_val = omax/(lowgv-uppgv);
 
 %Perform the shift and scale
-GImage = (GImage(1:sx,1:sy,1:nc)-double(shift_val)).*double(scale_val);
+%GImage = (GImage(1:sx,1:sy,1:nc)-double(shift_val)).*double(scale_val);
+
+GImage = (GImage-lowgv+1)/(uppgv-lowgv);
 
 %% Actual mapping of the previous result 
 %
@@ -100,3 +104,21 @@ GImage = GImage.^Gamma; %mapping
 imshow(GImage)
 end
 
+% You have to address the following problems:
+% 
+% * Why convert to grayscale: rgb2gray(OImage)?* You do not need to use
+% 'double()' on each variable you use. Specifying a variable in Matlab will
+% give you a double from start.?* The normalization is a bit overly
+% complicated with all the intermediate variables and unnecessary indexing.
+% 
+% But simplifying it we have:
+% (GImage(1:sx,1:sy,1:nc)-double(shift_val)).*double(scale_val) =
+% (GImage-shift_val)*scale_val =?(GImage-lowgv+1)/(uppgv-lowgv) We want to
+% 
+% map lowgv to 0 and uppgv to 1. But in this case, as an example, if a
+% pixel has the value lowgv, it will not be mapped to 0, but to:
+% (lowgv-lowgv+1)/(uppgv-lowgv) = 1/(uppgv-lowgv)
+% 
+% * You have not truncated the image. In some circumstances it will contain
+% pixels < 0 and pixels > 1. And gamma correction on negative pixel values
+% will mean complex numbers in the final output.
