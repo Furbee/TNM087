@@ -58,12 +58,12 @@ function CImage = WhitePoint(OImage,type)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                               TEST VARIABLES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-clc
-close all
-clear all
-
-OImage = imread('/Users/VikH/Documents/TNM087/Lab 1/Images/lily2.jpg');
-otype = 'b';
+% clc
+% close all
+% clear all
+% 
+% OImage = imread('/Users/VikH/Documents/TNM087/Lab 1/Images/lily2.jpg');
+% otype = 'b';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                               RUNTIME
