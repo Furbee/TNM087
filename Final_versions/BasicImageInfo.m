@@ -103,6 +103,8 @@ PtPos(:,:) = round(PtPos(:,:));
 
 for k = 1:nopts
     RGBpts(k,:,:) = impixel(OImage, PtPos(k,1), PtPos(k,2));
+    %%% Didn't work for me so used the old one.
+    %RGBpts(k,:,:) = OImage(PtPos(k,2), PtPos(k,2));
 end
 
 %% Generate the white squares and display the result
@@ -110,14 +112,25 @@ end
 figh = figure;
 DImage = OImage;   
 
+%Check if double, uint8 or uint16 and set maximum value
+type = class(OImage);
+
+if strcmpi(type, 'double') == 1
+    max = 1;
+elseif strcmpi(type, 'uint8') == 1
+    max = 255;
+elseif strcmpi(type, 'uint16') == 1
+    max = 65535;
+else
+    disp('load image of type double, uint8 or uint16.')
+end
+
 %Show image and generate squares on top
-imshow(DImage)
-hold on
 for k = 1:nopts
     %Generate the white squares from PtPos with size of Qsize
     for n = 1:Qsize
         DImage((PtPos(k,2)- (Qsize/2)):(PtPos(k,2)+ (Qsize/2)),(PtPos(k,1) ... 
-                - (Qsize/2)):(PtPos(k,1)+ (Qsize/2)),:) = 255;
+                - (Qsize/2)):(PtPos(k,1)+ (Qsize/2)),:) = max;
     end
 end 
 imshow(DImage)
