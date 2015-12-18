@@ -4,8 +4,8 @@ function CImage = WhitePoint(OImage,type)
 %
 %% Who has done it
 %
-% Author: vikhe927
-% Co-author: oscno829
+% Author: oscno829
+% Co-author: vikhe927
 % the other member of the group
 %
 %% Syntax of the function
@@ -21,8 +21,8 @@ function CImage = WhitePoint(OImage,type)
 %
 %% Basic version control (in case you need more than one attempt)
 %
-% Version: 1.1
-% Date: 15/12/2015
+% Version: 1.2
+% Date: 18/12/2015
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
@@ -49,8 +49,6 @@ function CImage = WhitePoint(OImage,type)
 
 %% Your code starts here
 %
-%OImage = imread('H:\TNM087\New Master\TNM087-master\Lab 1\Images\POW_6221.jpg');
-
 %% The default output type is uint8 
 % More information about handling of function arguments, string
 % manipulation and basic data types can be found in WhitePoint.pdf
@@ -58,12 +56,12 @@ function CImage = WhitePoint(OImage,type)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                               TEST VARIABLES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% clc
-% close all
-% clear all
-% 
-% OImage = imread('/Users/VikH/Documents/TNM087/Lab 1/Images/lily2.jpg');
-% otype = 'b';
+%  clc
+%  close all
+%  clear all
+%  
+%  OImage = imread('H:\TNM087\TNM087-master\Lab 1\Images\lily2.jpg');
+%  otype = 'd';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                               RUNTIME
@@ -84,6 +82,8 @@ function CImage = WhitePoint(OImage,type)
 % You can assume that it is either uint8 or double
 %
     if isa(OImage,'uint8')
+        InputImage = im2double(OImage);% convert to double
+    elseif isa(OImage,'uint16')
         InputImage = im2double(OImage);% convert to double
     else
         InputImage = OImage;
@@ -127,9 +127,12 @@ blueChannelCorrected = blueChannelCorrected .* 1/rgbvec(3);
 % greenChannelCorrected = greenChannelCorrected./max(max(greenChannelCorrected));
 % blueChannelCorrected = blueChannelCorrected./max(max(blueChannelCorrected));
 
-%
 CImage = cat(3, redChannelCorrected, greenChannelCorrected, blueChannelCorrected);
 
+%Truncate for > 1 to 1
+CImage(CImage > 1) = 1;
+%Truncate for < 0 to 0 
+CImage(CImage < 0) = 0;
 
 rgbvecNew = CImage(whitept(:,2),whitept(:,1),:);
 rgbvecNew = squeeze(rgbvecNew)'
@@ -137,14 +140,15 @@ rgbvec
 %% Generate the result image CImage
 switch otype
     case 'b' %uint8
-        CImage = uint8(CImage*255); 
+        CImage = uint8(CImage*255);
+        imshow([OImage,CImage]);
     case 'd' %double
-        CImage = double(CImage*255);
+        CImage = im2double(CImage);
+        imshow([OImage,(CImage*255)]);
     otherwise 
 %         
 end 
 
-imshow([OImage,CImage]);
 
 %% Cleaning
 close(fh)
