@@ -26,8 +26,8 @@ function GImage = GammaCorrection( OImage, Gamma, Lower, Upper )
 %
 %% Basic version control (in case you need more than one attempt)
 %
-% Version: 2
-% Date: 14/12/2015
+% Version: 3
+% Date: 11/01/2016
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
@@ -56,10 +56,16 @@ function GImage = GammaCorrection( OImage, Gamma, Lower, Upper )
 %
 
 %Convert OImage to double
-if isa(OImage,'uint8')
-        OImage = double(rgb2gray(OImage)); %convert to double
+%Check if RGB Image 
+if ndims(OImage) > 2
+    if isa(OImage,'uint8')
+        OImage = im2double(rgb2gray(OImage)); %convert to double
     else
-        OImage = double(rgb2gray(OImage)); %if double do nothing
+        OImage = im2double(rgb2gray(OImage)); %if double do nothing
+    end
+else
+    %If not set it to "rgb"-image
+    OImage = im2double(cat(3,OImage,OImage,OImage));
 end
 %OImage = OImage/255;
 
@@ -81,17 +87,16 @@ omin = 1;
 omax = 1;
 
 %Perform the shift and scale
-GImage = (GImage-lowgv+1)./(uppgv-lowgv);
+%GImage = (GImage-lowgv+1)./(uppgv-lowgv);
+GImage = (GImage-lowgv)./(uppgv-lowgv);
 
 %% Actual mapping of the previous result 
 %
-%Perform gamma correction
-GImage = GImage.^Gamma; %mapping
-
 % Truncate Image
 GImage(GImage > Upper) = 1;
 GImage(GImage < Lower) = 0;
-%Norm OImage
-OImage = OImage/255;
+
+%Perform gamma correction
+GImage = GImage.^Gamma; %mapping
 
 end
