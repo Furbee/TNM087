@@ -4,8 +4,8 @@ function sfunction = Sharpness(FStack)
 %
 %% Who has done it
 %
-% Author: vikhe927
-% Co-author: oscno829
+% Author: oscno829
+% Co-author: vikhe927
 % 
 %
 %% Syntax of the function
@@ -18,8 +18,8 @@ function sfunction = Sharpness(FStack)
 %
 %% Basic version control (in case you need more than one attempt)
 %
-% Version: 2
-% Date: 12/1/2016
+% Version: 1
+% Date: 15/12/2015
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
@@ -85,17 +85,17 @@ end
 %% Sum of fft magnitude per image - per ring
 
 absfftsums = zeros(noimages,maxindex);
-padding = [16,16];
+padding = [2,2];
 
 for imno = 1:noimages
     padimage = padarray(FStack(:,:,imno),padding);% Read about zero-padding
     ftplan = fft2(padimage); % 2D fft
-    cftplan = abs(fftshift(ftplan)); % move origin to the center
+    cftplan = fftshift(ftplan); % move origin to the center
     
     for ringno = 1:norings
         ringmask = (RQ == ringno);%this is a logical array defining the ring
         padmask = padarray(ringmask, padding);
-        magnitude = sum(sum(cftplan(padmask)));
+        magnitude = sum(sum(abs(cftplan(padmask))));
         absfftsums(imno,ringno) = magnitude / ptsperring(ringno);% average over Fourier magnitude in ring
     end
 end
@@ -115,14 +115,12 @@ end
 
 SharpestPic = max(meanfreqcontent);
 A = find(meanfreqcontent == SharpestPic);
-figure
 imshow(FStack(:,:,A))
-%figure
-%implay(FStack,1)
+figure
+implay(FStack,1)
 
 %%
-figure;
-plot(meanfreqcontent)
+plot(m
 %% Requested result
 % default solution but you can invent something else if you want
 sfunction = meanfreqcontent;

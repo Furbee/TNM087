@@ -52,30 +52,44 @@ function GImage = GammaCorrection( OImage, Gamma, Lower, Upper )
 %
 %
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                            TEST VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+clear all
+%close all
+clc
+
+OImage = imread('/Users/VikH/Documents/TNM087/Images/BoldRedEye.JPG');
+Gamma = 1.8;
+Lower = 0.01;
+Upper = 0.98;
+
+
 %% Image size and result allocation
 %
 
 %Convert OImage to double
 %Check if RGB Image 
 if ndims(OImage) > 2
-    if isa(OImage,'uint8')
         OImage = im2double(rgb2gray(OImage)); %convert to double
-    else
-        OImage = im2double(rgb2gray(OImage)); %if double do nothing
-    end
 else
     %If not set it to "rgb"-image
     OImage = im2double(cat(3,OImage,OImage,OImage));
 end
 %OImage = OImage/255;
 
+
+
 [sx,sy,nc] = size(OImage);
 
 GImage = OImage;
 %% Lower and upper gray value boundaries
 %
-lowgv = quantile(GImage(:),Lower);
-uppgv = quantile(GImage(:),Upper);
+%lowgv = quantile(GImage(:),Lower);
+%uppgv = quantile(GImage(:),Upper);
+
+lowgv = Lower * min(GImage(:));
+uppgv = Upper * max(GImage(:));
 
 %% Compute a scaled version GImage of the image where 
 % the lower-bound gray value is zero 
@@ -90,13 +104,21 @@ omax = 1;
 %GImage = (GImage-lowgv+1)./(uppgv-lowgv);
 GImage = (GImage-lowgv)./(uppgv-lowgv);
 
+
 %% Actual mapping of the previous result 
 %
 % Truncate Image
 GImage(GImage > Upper) = 1;
 GImage(GImage < Lower) = 0;
+% 
+% max = max(GImage(:))
+% min = min(GImage(:))
 
 %Perform gamma correction
 GImage = GImage.^Gamma; %mapping
+
+
+figure;
+imshow(GImage)
 
 end
