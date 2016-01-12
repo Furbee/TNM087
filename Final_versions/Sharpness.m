@@ -43,14 +43,20 @@ function sfunction = Sharpness(FStack)
 %       template
 %
 %
-clear all
-close all 
-clc
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                             TEST VARIABLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% clear all
+% close all 
+% clc
+% 
+% load('/Users/VikH/Documents/TNM087/Images/AutoFocus32x32Patches.mat');
+% FStack = winsuint8;
 
-load('/Users/VikH/Documents/TNM087/Images/AutoFocus32x32Patches.mat');
-FStack = winsuint8;
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                             RUNTIME
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Size of images and number of images
 %
 [sx,sy,noimages] = size(FStack);
@@ -111,18 +117,22 @@ for imno = 1:noimages
     meanfreqcontent(imno) = mean(w'.*absfftsums(imno,:),2); % combine w and absfftsums
 end
 
-%% Get sharpest image and display it
-
-SharpestPic = max(meanfreqcontent);
-A = find(meanfreqcontent == SharpestPic);
-figure
-imshow(FStack(:,:,A))
-%figure
-%implay(FStack,1)
-
 %%
-figure;
-plot(meanfreqcontent)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                             TESTING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Get sharpest image and display it
+
+% SharpestPic = max(meanfreqcontent);
+% A = find(meanfreqcontent == SharpestPic);
+% figure
+% imshow(FStack(:,:,A))
+
+% Display mean freq of the whole stack
+
+% figure;
+% plot(meanfreqcontent)
+
 %% Requested result
 % default solution but you can invent something else if you want
 sfunction = meanfreqcontent;
