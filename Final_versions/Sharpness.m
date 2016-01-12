@@ -96,12 +96,12 @@ padding = [16,16];
 for imno = 1:noimages
     padimage = padarray(FStack(:,:,imno),padding);% Read about zero-padding
     ftplan = fft2(padimage); % 2D fft
-    cftplan = abs(fftshift(ftplan)); % move origin to the center
+    cftplan = fftshift(ftplan); % move origin to the center
     
     for ringno = 1:norings
         ringmask = (RQ == ringno);%this is a logical array defining the ring
-        padmask = padarray(ringmask, padding);
-        magnitude = sum(sum(cftplan(padmask)));
+        padmask = padarray(ringmask, padding); %padding the mask to the same size as the images
+        magnitude = sum(sum(abs(cftplan(padmask))));
         absfftsums(imno,ringno) = magnitude / ptsperring(ringno);% average over Fourier magnitude in ring
     end
 end
@@ -121,15 +121,15 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                             TESTING
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Get sharpest image and display it
-
+% % Get sharpest image and display it
+% 
 % SharpestPic = max(meanfreqcontent);
 % A = find(meanfreqcontent == SharpestPic);
 % figure
 % imshow(FStack(:,:,A))
-
-% Display mean freq of the whole stack
-
+% 
+%Display mean freq of the whole stack
+% 
 % figure;
 % plot(meanfreqcontent)
 
