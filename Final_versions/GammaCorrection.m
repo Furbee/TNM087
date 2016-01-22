@@ -26,8 +26,8 @@ function GImage = GammaCorrection( OImage, Gamma, Lower, Upper )
 %
 %% Basic version control (in case you need more than one attempt)
 %
-% Version: 3
-% Date: 11/01/2016
+% Version: 4
+% Date: 23/01/2016
 %
 % Gives a history of your submission to Lisam.
 % Version and date for this function have to be updated before each
@@ -55,14 +55,14 @@ function GImage = GammaCorrection( OImage, Gamma, Lower, Upper )
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                            TEST VARIABLES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-clear all
-%close all
-clc
-
-OImage = imread('/Users/VikH/Documents/TNM087/Images/BoldRedEye.JPG');
-Gamma = 1.8;
-Lower = 0.01;
-Upper = 0.98;
+% clear all
+% close all
+% clc
+% 
+% OImage = imread('/Users/VikH/Documents/TNM087/Images/BoldRedEye.JPG');
+% Gamma = 1.8;
+% Lower = 0.01;
+% Upper = 0.98;
 
 
 %% Image size and result allocation
@@ -76,48 +76,34 @@ else
     %If not set it to "rgb"-image
     OImage = im2double(cat(3,OImage,OImage,OImage));
 end
-%OImage = OImage/255;
-
-
 
 [sx,sy,nc] = size(OImage);
 
 GImage = OImage;
 %% Lower and upper gray value boundaries
-%
-%lowgv = quantile(GImage(:),Lower);
-%uppgv = quantile(GImage(:),Upper);
-
-lowgv = Lower * min(GImage(:));
-uppgv = Upper * max(GImage(:));
+% 
+lowgv = quantile(GImage(:),Lower);
+uppgv = quantile(GImage(:),Upper);
 
 %% Compute a scaled version GImage of the image where 
 % the lower-bound gray value is zero 
 % the upper-bound gray value is one 
 % because 0^Gamma = 0 and 1^Gamma = 1
-%
-%Set max & min values to use in shift/move & scale
-omin = 1;
-omax = 1;
 
 %Perform the shift and scale
-%GImage = (GImage-lowgv+1)./(uppgv-lowgv);
 GImage = (GImage-lowgv)./(uppgv-lowgv);
 
-
 %% Actual mapping of the previous result 
-%
+
 % Truncate Image
-GImage(GImage > Upper) = 1;
-GImage(GImage < Lower) = 0;
-% 
-% max = max(GImage(:))
-% min = min(GImage(:))
+GImage = max(min(GImage, 1), 0); 
+% GImage(GImage > uppgv) = 1; %original solution but corrected
+% GImage(GImage < lowgv) = 0; %original solution but corrected
 
 %Perform gamma correction
 GImage = GImage.^Gamma; %mapping
 
-
+%Show result
 figure;
 imshow(GImage)
 
